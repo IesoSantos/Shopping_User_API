@@ -3,20 +3,19 @@
  */
 package com.ieso.shopping.controller;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ieso.shopping.model.UserDTO;
+import com.ieso.shopping.service.UserService;
 
 /**
  * @author Anderson dos Reis Santos
@@ -25,6 +24,44 @@ import com.ieso.shopping.model.UserDTO;
 @RestController
 public class UserController {
 
+	@Autowired
+	private UserService userService;
+	
+	@GetMapping("/user/")
+	public List<UserDTO> getUsers(){
+		List<UserDTO> usuarios = userService.getAll();
+		return usuarios;
+	}
+	
+	@GetMapping("/user/{id}")
+	UserDTO findById(@PathVariable Long id) {
+		return userService.findById(id);
+	}
+	
+	@PostMapping("/user")
+	UserDTO newUser(@RequestBody UserDTO userDTO) {
+		return userService.save(userDTO);
+	}
+	
+	@GetMapping("/user/cpf/{cpf}")
+	UserDTO findByCpf(@PathVariable String cpf) {
+		return userService.findByCpf(cpf);
+	}
+	
+	@DeleteMapping("/user/{id}")
+	UserDTO delete(@PathVariable Long id) {
+		return userService.delete(id);
+	}
+	
+	@GetMapping("/user/search")
+	public List<UserDTO> queryByName(
+			@RequestParam(name = "nome", required = true)
+			String nome
+			){
+		return userService.queryByName(nome);
+	}
+	
+	/*
 	public static List<UserDTO> usuarios = new ArrayList<UserDTO>();;
 	
 	@PostConstruct
@@ -63,7 +100,10 @@ public class UserController {
 		return usuarios;
 	}
 	
-	@GetMapping("/users/{cpf}")
+	
+	
+	
+	@GetMapping("/user/{cpf}")
 	public UserDTO getUsersFiltro(@PathVariable String cpf) {
 		for(UserDTO userFilter:usuarios) {
 			if(userFilter.getCpf().equals(cpf)) {
@@ -72,6 +112,7 @@ public class UserController {
 		}
 		return null;
 	}
+	
 	
 	@PostMapping("/newUser")
 	UserDTO inserir(@RequestBody UserDTO userDTO) {
@@ -90,4 +131,5 @@ public class UserController {
 		}
 		return false;
 	}
+	*/
 }
