@@ -4,6 +4,7 @@
 package com.ieso.shopping.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,14 @@ public class UserService {
 				.map(UserDTO::convert)
 				.collect(Collectors.toList());
 				
+	}
+	
+	public UserDTO findById(long userId) {
+		Optional<User> usuario = userRepository.findById(userId);
+		if(usuario.isPresent()) {
+			return UserDTO.convert(usuario.get());
+		}
+		return null;
 	}
 
 }
