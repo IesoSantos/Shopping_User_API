@@ -51,7 +51,10 @@ public class UserService {
 		Optional<User> user = userRepository.findById(userId);
 		if(user.isPresent()) {
 			userRepository.delete(user.get());
+			//eu coloquei
+			return UserDTO.convert(user.get());
 		}
+		//eu coloquei
 		return null;
 	}
 	
